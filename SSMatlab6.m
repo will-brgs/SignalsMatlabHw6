@@ -30,12 +30,17 @@ rect = ones(1,50);
 
 pulse = 2 * conv(rect, rect);
 
-pulse_fft = fft(pulse);
+pulse_fft = fftshift(pulse);
 
 figure, hold on
 % subplot(3,1,1),stem(x);
 % subplot(3,1,2),plot(n);
 % subplot(3,1,3),plot(r); 
-stem(pulse);
+%stem(pulse);
+plot(mag2db(abs(pulse_fft)));
 hold off
+
+N = 100;
+bits = 2 * ((rand(1, N) > 0.5) - 0.5);
+
 %% Part 2: Performance Test
