@@ -21,12 +21,6 @@ x = round(rand(1,length(sampleTimes)));
 x(x==0) = -1;
 n = randn(1,length(x));
 
-sigma = 1;
-
-n = n * sigma;
-
-r = x + n;
-
 rect = ones(1,50);
 
 pulse = 2 * conv(rect, rect);
@@ -56,8 +50,35 @@ end
 
 
 y = conv(imp_train,pulse);
-
-figure,plot(y)
 % figure, subplot (2,1,1),plot(y)
 % subplot(2,1,2),plot(xn)
+
+sigma = 10;
+noise = sigma*randn(1,length(y));
+r = y + (noise * sigma);
+
+figure,plot(r)
+%% Part f:  Create various outputs
+
+% i, p(t), p(w)
+figure, hold on
+subplot(2,1,1);
+stem(pulse)
+ylabel('Amplitude')
+xlabel('Index')
+title('Pulse P(t)')
+
+subplot(2,1,2)
+plot(pulse_fft)
+ylabel('Amplitude')
+xlabel('Frequency (rad)')
+title('Pulse Sprectum P(w)')
+hold off
+
+% ii, y(t)
+figure, hold on
+plot(y)
+ylabel('Amplitude')
+xlabel('Index')
+title('Transmittetd Signal y(t)')
 %% Part 2: Performance Test
