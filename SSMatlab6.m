@@ -10,6 +10,7 @@ clc
 %% Part  1: Create Binary PAM System
 %% Generate Input Signal and Add Noise Factor
 Tp = 0.1;
+Ts = 100;
 dt = Tp/50;
 
 Fs = 1/dt;
@@ -40,7 +41,23 @@ figure, hold on
 plot(mag2db(abs(pulse_fft)));
 hold off
 
-N = 100;
-bits = 2 * ((rand(1, N) > 0.5) - 0.5);
+N = 20;
+xn = 2 * ((rand(1, N) > 0.5) - 0.5);
+a = 0;
+imp_train = zeros(1,N*Ts);
+for k = 1:length(imp_train)
+    if mod(k - 1, Ts) == 0
+    a = a+1;
+    imp_train(k) = xn(a);
+    else
+    imp_train(k) = 0;    
+    end
+end
 
+
+y = conv(imp_train,pulse);
+
+figure,plot(y)
+% figure, subplot (2,1,1),plot(y)
+% subplot(2,1,2),plot(xn)
 %% Part 2: Performance Test
