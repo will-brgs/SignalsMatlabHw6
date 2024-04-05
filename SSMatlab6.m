@@ -81,4 +81,6 @@ plot(y)
 ylabel('Amplitude')
 xlabel('Index')
 title('Transmittetd Signal y(t)')
+
+% iii, r(t)
 %% Part 2: Performance Test
