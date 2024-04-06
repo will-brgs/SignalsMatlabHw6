@@ -16,8 +16,6 @@ sample_freq = 1/sample_period; % Frequency of pulse and recieve signal
 bit_rate = 1/(Tp); %Fb, frequency of bits sent out
 bit_period = 1/bit_rate; % Ts, Time between bits sent out
 
-
-
 rect = ones(1,50);
 pulse = 2 * conv(rect, rect);
 pulse_fft = fftshift(pulse);
@@ -32,9 +30,11 @@ pulse_fft = fftshift(pulse);
 
 N = 20;
 
+maxTime = N * bit_period;
+
 xn = 2 * ((rand(1, N) > 0.5) - 0.5);
 a = 0;
-imp_train = zeros(1,maxTime);
+imp_train = zeros(1,N * bit_period * sample_freq);
 for k = 1:length(imp_train)
     if mod(k - 1, sample_freq * bit_period) == 0
     a = a + 1;
@@ -72,9 +72,11 @@ xlabel('Frequency (rad)')
 title('Pulse Sprectum P(w)')
 hold off
 
+times = linspace(0, maxTime + 2 * Tp, length(y));
+
 % ii, y(t)
 figure, hold on
-plot(sampleTimes,y)
+plot(times,y)
 ylabel('Amplitude')
 xlabel('Time')
 title('Transmittetd Signal y(t)')
