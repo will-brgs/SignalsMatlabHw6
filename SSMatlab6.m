@@ -16,12 +16,7 @@ sample_freq = 1/sample_period; % Frequency of pulse and recieve signal
 bit_rate = 1/(Tp); %Fb, frequency of bits sent out
 bit_period = 1/bit_rate; % Ts, Time between bits sent out
 
-maxTime = Tp;
-sampleTimes = 0:sample_period:maxTime;
 
-x = round(rand(1,length(sampleTimes)));
-x(x==0) = -1;
-n = randn(1,length(x));
 
 rect = ones(1,50);
 pulse = 2 * conv(rect, rect);
@@ -37,11 +32,9 @@ pulse_fft = fftshift(pulse);
 
 N = 20;
 
-
-
 xn = 2 * ((rand(1, N) > 0.5) - 0.5);
 a = 0;
-imp_train = zeros(1,N * sample_freq * bit_period);
+imp_train = zeros(1,maxTime);
 for k = 1:length(imp_train)
     if mod(k - 1, sample_freq * bit_period) == 0
     a = a + 1;
@@ -50,6 +43,8 @@ for k = 1:length(imp_train)
     imp_train(k) = 0;    
     end
 end
+
+sampleTimes = 0:sample_period:(N*bit_period)-sample_period;
 
 y = conv(imp_train,pulse);
 % figure, subplot (2,1,1),plot(y)
@@ -79,11 +74,11 @@ hold off
 
 % ii, y(t)
 figure, hold on
-plot(y)
+plot(sampleTimes,y)
 ylabel('Amplitude')
-xlabel('Index')
+xlabel('Time')
 title('Transmittetd Signal y(t)')
-
+hold off
 % iii, r(t)
 
 %% Part 2: Performance Test
