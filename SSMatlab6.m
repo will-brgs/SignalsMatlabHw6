@@ -76,7 +76,8 @@ times = linspace(0, maxTime + 2 * Tp, length(y));
 
 % ii, y(t)
 figure, hold on
-plot(y)
+plot(times, y)
+xlim([0 maxTime + 2 * Tp]);
 ylabel('Amplitude')
 xlabel('Time (s)')
 title('Transmitted Signal y(t)')
@@ -85,6 +86,7 @@ hold off
 % iii, r(t)
 figure, hold on
 plot(times,r)
+xlim([0 maxTime + 2 * Tp]);
 ylabel('Amplitude')
 xlabel('Time (s)')
 title('Recieved Signal r(t)')
@@ -104,16 +106,15 @@ filtered = conv(r,pulse);
 
 decoded = zeros(length(N));
 a = 0;
-pulselen= length(pulse)
-filterlen= length(filtered)
+pulselen = length(pulse)
+filterlen = length(filtered)
 
 
-for i = 100:50:length(filtered)-100
+for i = pulselen+1:(pulselen+1)/2:length(filtered)-pulselen-1
+    a = a + 1;
     if(filtered(i) > 0)
-        a = a + 1;
-    decoded(a) = 1;
+        decoded(a) = 1;
     else
-       a = a + 1;
        decoded(a) = -1;
     end
 end
