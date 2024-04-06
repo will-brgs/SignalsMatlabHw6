@@ -50,8 +50,8 @@ y = conv(imp_train,pulse);
 % figure, subplot (2,1,1),plot(y)
 % subplot(2,1,2),stem(xn)
 
-sigma = 10;
-noise = sigma * randn(1,length(y));
+sigma = 1;
+noise = sigma * max(y) * randn(1,length(y));
 r = y + (noise * sigma);
 
 %figure,plot(r)
@@ -76,11 +76,51 @@ times = linspace(0, maxTime + 2 * Tp, length(y));
 
 % ii, y(t)
 figure, hold on
-plot(times,y)
+plot(y)
 ylabel('Amplitude')
-xlabel('Time')
-title('Transmittetd Signal y(t)')
+xlabel('Time (s)')
+title('Transmitted Signal y(t)')
 hold off
-% iii, r(t)
 
+% iii, r(t)
+figure, hold on
+plot(times,r)
+ylabel('Amplitude')
+xlabel('Time (s)')
+title('Recieved Signal r(t)')
+hold off
+
+% iv, Sent Messave vs. decoded message
+times_sent = 0:bit_period:2-bit_period;
+figure, hold on
+subplot(2,1,1)
+stem(times_sent,xn)
+ylabel('Amplitude')
+xlabel('Time (s)')
+title('Transmitted Signal xn')
+subplot(2,1,2)
+
+filtered = conv(r,pulse);
+
+decoded = zeros(length(N));
+a = 0;
+pulselen= length(pulse)
+filterlen= length(filtered)
+
+
+for i = 100:50:length(filtered)-100
+    if(filtered(i) > 0)
+        a = a + 1;
+    decoded(a) = 1;
+    else
+       a = a + 1;
+       decoded(a) = -1;
+    end
+end
+
+stem(times_sent,decoded);
+ylabel('Amplitude')
+xlabel('Time (s)')
+title('Decoded Signal r(t)')
+hold off
 %% Part 2: Performance Test
