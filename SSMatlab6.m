@@ -13,7 +13,7 @@ Tp = 0.1; % Half pulse width
 sample_period = Tp/50; % dt, pulse and recieve sample period
 sample_freq = 1/sample_period; % Frequency of pulse and recieve signal 
 
-bit_rate = 1/(Tp); %Fb, frequency of bits sent out
+bit_rate = 1/(4 * Tp); %Fb, frequency of bits sent out
 bit_period = 1/bit_rate; % Ts, Time between bits sent out
 
 rect = ones(1,50);
@@ -93,7 +93,7 @@ title('Recieved Signal r(t)')
 hold off
 
 % iv, Sent Messave vs. decoded message
-times_sent = 0:bit_period:2-bit_period;
+times_sent = 0:bit_period:maxTime-bit_period;
 figure, hold on
 subplot(2,1,1)
 stem(times_sent,xn)
@@ -103,14 +103,17 @@ title('Transmitted Signal xn')
 subplot(2,1,2)
 
 filtered = conv(r,pulse);
+decoded = zeros(1, N);
 
-decoded = zeros(length(N));
 a = 0;
 pulselen = length(pulse)
 filterlen = length(filtered)
 
+factor = 1/(bit_rate * Tp); % find factor relating Ts and Tp, use that to modify pulselen
+% please name this something other than factor
 
-for i = pulselen+1:(pulselen+1)/2:length(filtered)-pulselen-1
+% don't ask me to explain this
+for i = pulselen + 1:(pulselen * factor + mod(factor, 2))/2:filterlen-pulselen * factor - 1
     a = a + 1;
     if(filtered(i) > 0)
         decoded(a) = 1;
