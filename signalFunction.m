@@ -1,4 +1,4 @@
-function r = signalFunction(bitrate, sigma_arr)
+function [r, y] = signalFunction(bitrate, sigma_arr)
     
     Tp = 0.1; % Half pulse width
     sample_period = Tp/50; % dt, pulse and recieve sample period
