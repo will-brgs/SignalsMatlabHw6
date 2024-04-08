@@ -267,10 +267,10 @@ hold off
 error = (sum(xn ~= decoded)/length(decoded)); 
 SNR = (sum(y.^2))/(sum(noise.^2));
 
-disp(['Bitrate: ' ,num2str(bit_rate*100), ' bits/second'])
+disp(['Bitrate: ' ,num2str(bit_rate), ' bits/second'])
 disp(['Standard Deviation: ' , num2str(sigma)])
 disp(['SNR: ' , num2str(SNR)])
-disp(['Error: ' ,num2str(error),' percent'])
+disp(['Error: ' ,num2str(error*100),' percent'])
 
 %% Part 2: Performance Test
 sigma_arr = [0, 1, 2, 3, 4];
