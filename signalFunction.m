@@ -1,6 +1,6 @@
 function r = signalFunction(bitrate, sigma_arr)
     r = zeros(1, length(sigma_arr));
-    for i = 1:length(sigma_arr)
+    
     Tp = 0.1; % Half pulse width
     sample_period = Tp/50; % dt, pulse and recieve sample period
     sample_freq = 1/sample_period; % Frequency of pulse and recieve signal 
@@ -41,7 +41,7 @@ function r = signalFunction(bitrate, sigma_arr)
     y = conv(imp_train,pulse);
     % figure, subplot (2,1,1),plot(y)
     % subplot(2,1,2),stem(xn)
-    
+    for i = 1:length(sigma_arr)
     sigma = sigma_arr(i);
     noise = sigma * max(y) * randn(1,length(y));
     r(i) = y + (noise * sigma);

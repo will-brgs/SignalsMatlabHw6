@@ -65,10 +65,10 @@ ylabel('Amplitude')
 xlabel('Index')
 title('Pulse P(t), Bitrate = 1/Tp')
 
-f = (0:1:length(pulse_fft)-1*sample_freq);
+
 
 subplot(2,1,2)
-plot(f,pulse_fft)
+plot(pulse_fft)
 ylabel('Amplitude')
 xlabel('Frequency (Hz)')
 title('Pulse Sprectum P(w), Bitrate = 1/Tp')
@@ -273,4 +273,6 @@ disp(['SNR: ' , num2str(SNR)])
 disp(['Error: ' ,num2str(error),' percent'])
 
 %% Part 2: Performance Test
+
+r_Tp = signalFunction(1/Tp, [0, .25, .5, .75, 1]);
 
