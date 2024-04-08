@@ -128,14 +128,13 @@ xlabel('Time (s)')
 title('Decoded Signal r(t), Bitrate = 1/Tp')
 hold off
 
-error = sum(xn ~= decoded); 
+error = (sum(xn ~= decoded)/length(decoded)); 
 SNR = (sum(y.^2))/(sum(noise.^2));
-
 
 disp(['Bitrate: ' ,num2str(bit_rate), ' bits/second'])
 disp(['Standard Deviation: ' , num2str(sigma)])
 disp(['SNR: ' , num2str(SNR)])
-disp(['Error: ' ,num2str(error)])
+disp(['Error: ' ,num2str(error),' percent'])
 
 
 %% Generate Input Signal and Add Noise Factor, Bitrate = 1/2*Tp
@@ -258,14 +257,13 @@ xlabel('Time (s)')
 title('Decoded Signal r(t), Bitrate = 1/(2*Tp)')
 hold off
 
-error = sum(xn ~= decoded); 
+error = (sum(xn ~= decoded)/length(decoded)); 
 SNR = (sum(y.^2))/(sum(noise.^2));
-
 
 disp(['Bitrate: ' ,num2str(bit_rate), ' bits/second'])
 disp(['Standard Deviation: ' , num2str(sigma)])
 disp(['SNR: ' , num2str(SNR)])
-disp(['Error: ' ,num2str(error)])
+disp(['Error: ' ,num2str(error),' percent'])
 
 %% Part 2: Performance Test
 
