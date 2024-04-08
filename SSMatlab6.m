@@ -65,10 +65,12 @@ ylabel('Amplitude')
 xlabel('Index')
 title('Pulse P(t), Bitrate = 1/Tp')
 
+f = (0:1:length(pulse_fft)-1*sample_freq);
+
 subplot(2,1,2)
-plot(pulse_fft)
+plot(f,pulse_fft)
 ylabel('Amplitude')
-xlabel('Frequency (rad)')
+xlabel('Frequency (Hz)')
 title('Pulse Sprectum P(w), Bitrate = 1/Tp')
 hold off
 
@@ -194,10 +196,13 @@ ylabel('Amplitude')
 xlabel('Index')
 title('Pulse P(t), Bitrate = 1/(2*Tp)')
 
+f = (0:1:length(pulse_fft)-1);
+
+
 subplot(2,1,2)
-plot(pulse_fft)
+plot(f,pulse_fft)
 ylabel('Amplitude')
-xlabel('Frequency (rad)')
+xlabel('Frequency (Hz)')
 title('Pulse Sprectum P(w), Bitrate = 1/(2*Tp)')
 hold off
 
