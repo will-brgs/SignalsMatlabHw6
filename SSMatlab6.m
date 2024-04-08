@@ -273,6 +273,100 @@ disp(['SNR: ' , num2str(SNR)])
 disp(['Error: ' ,num2str(error),' percent'])
 
 %% Part 2: Performance Test
+sigma_arr = [0, 1, 2, 3, 4];
+r_Tp = signalFunction(1/Tp, sigma_arr);
+r_2Tp = signalFunction(1/(2*Tp), sigma_arr);
+times_sent_Tp = 0:Tp:N*Tp-Tp;
+figure, hold on
+for j = 1:5
+    filtered_Tp = conv(r_Tp(:, j),pulse);
+    a = 0;
+    decoded_Tp = zeros(1, N);
+    pulselen = length(pulse);
+    filterlen = length(filtered_Tp);
+    
+    factor = 1/((1/Tp) * Tp); % find factor relating Ts and Tp, use that to modify pulselen
+    % please name this something other than factor
+    
+    % don't ask me to explain this
+    for i = pulselen + 1:(pulselen * factor + mod(factor, 2))/2:filterlen-pulselen * factor - 1
+        a = a + 1;
+        if(filtered_Tp(i) > 0)
+            decoded_Tp(a) = 1;
+        else
+           decoded_Tp(a) = -1;
+        end
+    end
+    
+    
+    subplot(3, 2, j);
+    stem(times_sent_Tp, decoded_Tp);
+    title(['Sigma = ',num2str(sigma_arr(j))])
+    sgtitle('Matched Fitler With Bitrate=1/Tp')
+    xlabel('Time (s)')
+    ylabel('Decoded Output')
+end
+hold off;
 
-r_Tp = signalFunction(1/Tp, [0, .25, .5, .75, 1]);
 
+times_sent_2Tp = 0:2*Tp:2*N*Tp-(2*Tp);
+figure, hold on
+for j = 1:5
+    filtered_2Tp = conv(r_2Tp(:, j),pulse);
+    a = 0;
+    decoded_2Tp = zeros(1, N);
+    pulselen = length(pulse);
+    filterlen = length(filtered_2Tp);
+    
+    factor = 1/((1/(2*Tp)) * Tp); % find factor relating Ts and Tp, use that to modify pulselen
+    % please name this something other than factor
+    
+    % don't ask me to explain this
+    for i = pulselen + 1:(pulselen * factor + mod(factor, 2))/2:filterlen-pulselen * factor - 1
+        a = a + 1;
+        if(filtered_2Tp(i) > 0)
+            decoded_2Tp(a) = 1;
+        else
+           decoded_2Tp(a) = -1;
+        end
+    end
+    
+    
+    subplot(3, 2, j);
+    stem(times_sent_2Tp, decoded_2Tp);
+    title(['Sigma = ',num2str(sigma_arr(j))])
+    sgtitle('Matched Fitler With Bitrate=1/(2*Tp)')
+    xlabel('Time (s)')
+    ylabel('Decoded Output')
+end
+hold off
+
+figure, hold on
+for j = 1:5
+    a = 0;
+    unfiltered_2Tp = zeros(1, N);
+    pulselen = length(pulse);
+    filterlen = length(r_2Tp(:,j));
+    
+    factor = 1/((1/(2*Tp)) * Tp); % find factor relating Ts and Tp, use that to modify pulselen
+    % please name this something other than factor
+    
+    % don't ask me to explain this
+    for i = pulselen + 1:(pulselen * factor + mod(factor, 2))/2:filterlen-pulselen * factor - 1
+        a = a + 1;
+        if(r_2Tp(i) > 0)
+            unfiltered_2Tp(a) = 1;
+        else
+           unfiltered_2Tp(a) = -1;
+        end
+    end
+    
+    
+    subplot(3, 2, j);
+    stem(times_sent_2Tp, unfiltered_2Tp);
+    title(['Sigma = ',num2str(sigma_arr(j))])
+    sgtitle('Sign-based Reciever With Bitrate=1/(2*Tp)')
+    xlabel('Time (s)')
+    ylabel('Decoded Output')
+end
+hold off
