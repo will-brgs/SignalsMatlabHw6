@@ -226,6 +226,8 @@ xlabel('Time (s)')
 title('Recieved Signal r(t), Bitrate = 1/(2*Tp)')
 hold off
 
+
+
 % iv, Sent Messave vs. decoded message
 times_sent = 0:bit_period:maxTime-bit_period;
 figure, hold on
