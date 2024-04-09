@@ -352,7 +352,7 @@ for j = 1:5
     % please name this something other than factor
     
     
-    for i = pulselen + 1:(pulselen * factor + mod(factor, 2))/2:filterlen-pulselen * factor - 1
+    for i = pulselen + 1:(pulselen * factor + mod(factor, 2))/2:(filterlen-pulselen * (factor - 1))
         a = a + 1;
         if(r_2Tp(i) > 0)
             unfiltered_2Tp(a) = 1;
@@ -382,7 +382,7 @@ for j = 1:5
     % please name this something other than factor
     
     
-    for i = pulselen + 1:(pulselen * factor + mod(factor, 2))/2:filterlen-pulselen * factor - 1
+    for i = pulselen + 1:(pulselen * factor + mod(factor, 2))/2:(filterlen-pulselen * (factor - 1))
         a = a + 1;
         if(r_2Tp(i) > 0)
             unfiltered_Tp(a) = 1;
