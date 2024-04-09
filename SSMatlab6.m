@@ -274,10 +274,18 @@ disp(['Error: ' ,num2str(error*100),' percent'])
 
 %% Part 2: Performance Test
 sigma_arr = [0, 1, 2, 3, 4];
-[r_Tp, y_Tp] = signalFunction(1/Tp, sigma_arr);
-[r_2Tp, y_2Tp] = signalFunction(1/(2*Tp), sigma_arr);
+
+[r_Tp, SNR_arr_Tp, xn_Tp] = signalFunction(1/Tp, sigma_arr);
+[r_2Tp, SNR_arr_2Tp, xn_2Tp] = signalFunction(1/(2*Tp), sigma_arr);
+
 times_sent_Tp = 0:Tp:N*Tp-Tp;
+error_arr_Tp = zeros(1, length(sigma_arr));
+error_arr_2Tp = zeros(1, length(sigma_arr));
+error_arr_2Tp_unf = zeros(1, length(sigma_arr));
+error_arr_Tp_unf = zeros(1, length(sigma_arr));
+
 figure, hold on
+
 for j = 1:5
     filtered_Tp = conv(r_Tp(:, j),pulse);
     a = 0;
@@ -298,7 +306,8 @@ for j = 1:5
         end
     end
     
-    
+    error_arr_Tp(j) = sum(xn_Tp ~= decoded_Tp); 
+
     subplot(3, 2, j);
     stem(times_sent_Tp, decoded_Tp);
     title(['Sigma = ',num2str(sigma_arr(j))])
@@ -307,7 +316,6 @@ for j = 1:5
     ylabel('Decoded Output')
 end
 hold off;
-
 
 times_sent_2Tp = 0:2*Tp:2*N*Tp-(2*Tp);
 figure, hold on
@@ -321,7 +329,6 @@ for j = 1:5
     factor = 1/((1/(2*Tp)) * Tp); % find factor relating Ts and Tp, use that to modify pulselen
     % please name this something other than factor
     
-    
     for i = pulselen + 1:(pulselen * factor + mod(factor, 2))/2:filterlen-pulselen * factor - 1
         a = a + 1;
         if(filtered_2Tp(i) > 0)
@@ -331,7 +338,8 @@ for j = 1:5
         end
     end
     
-    
+    error_arr_2Tp(j) = sum(xn_2Tp ~= decoded_2Tp); 
+
     subplot(3, 2, j);
     stem(times_sent_2Tp, decoded_2Tp);
     title(['Sigma = ',num2str(sigma_arr(j))])
@@ -351,7 +359,6 @@ for j = 1:5
     factor = 1/((1/(2*Tp)) * Tp); % find factor relating Ts and Tp, use that to modify pulselen
     % please name this something other than factor
     
-    
     for i = pulselen + 1:(pulselen * factor + mod(factor, 2))/2:(filterlen-pulselen * (factor - 1))
         a = a + 1;
         if(r_2Tp(i) > 0)
@@ -361,7 +368,8 @@ for j = 1:5
         end
     end
     
-    
+    error_arr_2Tp_unf(j) = sum(xn_2Tp ~= unfiltered_2Tp); 
+
     subplot(3, 2, j);
     stem(times_sent_2Tp, unfiltered_2Tp);
     title(['Sigma = ',num2str(sigma_arr(j))])
@@ -381,7 +389,6 @@ for j = 1:5
     factor = 1/((1/Tp) * Tp); % find factor relating Ts and Tp, use that to modify pulselen
     % please name this something other than factor
     
-    
     for i = pulselen + 1:(pulselen * factor + mod(factor, 2))/2:(filterlen-pulselen * (factor - 1))
         a = a + 1;
         if(r_2Tp(i) > 0)
@@ -391,7 +398,8 @@ for j = 1:5
         end
     end
     
-    
+    error_arr_Tp_unf(j) = sum(xn_Tp ~= unfiltered_Tp); 
+
     subplot(3, 2, j);
     stem(times_sent_Tp, unfiltered_Tp);
     title(['Sigma = ',num2str(sigma_arr(j))])
@@ -400,3 +408,23 @@ for j = 1:5
     ylabel('Decoded Output')
 end
 hold off
+
+figure()
+subplot(2, 1, 1)
+hold on
+plot(SNR_arr_Tp, error_arr_Tp);
+plot(SNR_arr_Tp, error_arr_Tp_unf);
+hold off
+legend("Matched Filter", "Sign-Based Receiver");
+title("SNR with Amount of Errors, Bit Rate = 1/T_p")
+xlabel("SNR"); ylabel("Amount of Errors");
+subplot(2, 1, 2)
+hold on
+plot(SNR_arr_2Tp, error_arr_2Tp);
+plot(SNR_arr_2Tp, error_arr_2Tp_unf);
+hold off
+legend("Matched Filter", "Sign-Based Receiver");
+title("SNR with Amount of Errors, Bit Rate = 1/2T_p")
+xlabel("SNR"); ylabel("Amount of Errors");
+
+

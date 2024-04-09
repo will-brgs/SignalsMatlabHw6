@@ -1,4 +1,4 @@
-function [r, y] = signalFunction(bitrate, sigma_arr)
+function [r, SNR_arr, xn] = signalFunction(bitrate, sigma_arr)
     
     Tp = 0.1; % Half pulse width
     sample_period = Tp/50; % dt, pulse and recieve sample period
@@ -41,9 +41,14 @@ function [r, y] = signalFunction(bitrate, sigma_arr)
     r = zeros(length(y), length(sigma_arr));
     % figure, subplot (2,1,1),plot(y)
     % subplot(2,1,2),stem(xn)
+    SNR_arr = zeros(1, length(sigma_arr));
     for i = 1:length(sigma_arr)
-    sigma = sigma_arr(i);
-    noise = sigma * max(y) * randn(1,length(y));
-    r(:, i) = y + (noise * sigma);
+        sigma = sigma_arr(i);
+        noise = sigma * max(y) * randn(1,length(y));
+        r(:, i) = y + (noise * sigma);
+        SNR_arr(i) = (sum(y.^2))/(sum(noise.^2));
     end
+    
+    SNR_arr(1) = 1;
+
 end
